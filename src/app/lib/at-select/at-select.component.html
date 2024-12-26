@@ -1,0 +1,33 @@
+<div class="wave-group">
+  <select
+    class="input"
+    [formControl]="formControl!"
+    (change)="onSelectChange($event)"
+  >
+    <option *ngFor="let item of items" [value]="item[selectValue]">
+      {{ item[selectLabel] }}
+    </option>
+  </select>
+  <span
+    class="bar"
+    [ngClass]="{
+      invalid:
+        formControl?.invalid && (formControl?.touched || formControl?.dirty)
+    }"
+  ></span>
+  <label
+    class="label"
+    [ngClass]="{
+      value: formControl?.value,
+      invalid:
+        formControl?.invalid && (formControl?.touched || formControl?.dirty)
+    }"
+  >
+    <span
+      *ngFor="let char of getLabelCharacters()"
+      [style.--index]="char.index"
+      class="label-char"
+      >{{ char.char }}</span
+    >
+  </label>
+</div>

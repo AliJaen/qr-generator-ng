@@ -1,0 +1,40 @@
+<div
+  class="file-upload-container"
+  (drop)="onDrop($event)"
+  (dragover)="onDragOver($event)"
+  (paste)="onPaste($event)"
+>
+  <input
+    type="file"
+    accept="image/*"
+    capture="environment"
+    (change)="onFileSelected($event)"
+    #fileInput
+    hidden
+  />
+
+  <button
+    *ngIf="!file && !fileURL"
+    type="button"
+    (click)="fileInput.click()"
+    class="button-load"
+  >
+    {{ "Cargar archivo o abrir cámara" }}
+  </button>
+
+  <div *ngIf="file || fileURL" class="file-preview">
+    <img
+      *ngIf="fileType?.startsWith('image/') || fileURL"
+      [src]="fileURL"
+      alt="Vista previa"
+    />
+    <p *ngIf="file">{{ "Nombre: " + file.name }}</p>
+    <p *ngIf="file">
+      {{ "Tamaño: " + (file.size / 1024).toFixed(2) + "KB" }}
+    </p>
+
+    <button type="button" (click)="removeFile()" class="button-drop">
+      {{ "Eliminar archivo" }}
+    </button>
+  </div>
+</div>

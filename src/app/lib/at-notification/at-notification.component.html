@@ -1,0 +1,20 @@
+<div class="notification-container">
+  <div
+    *ngFor="let notification of notifications"
+    [class]="notification.type"
+    [ngClass]="{
+      notification: true,
+      'notification-enter': !notification.exiting,
+      'notification-exit': notification.exiting
+    }"
+    (animationend)="handleAnimationEnd($event, notification)"
+    (click)="remove(notification)"
+  >
+    <div class="notiglow"></div>
+    <div class="notiborderglow"></div>
+    <div [class]="'notititle ' + notification.type">
+      {{ notification.title }}
+    </div>
+    <div class="notibody">{{ notification.message }}</div>
+  </div>
+</div>

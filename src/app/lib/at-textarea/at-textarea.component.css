@@ -1,0 +1,101 @@
+.wave-group {
+  position: relative;
+  margin-top: 1.4rem;
+}
+
+.wave-group .textarea {
+  font-size: 16px;
+  padding: 10px 10px 10px 5px;
+  display: block;
+  width: 100%;
+  border: none;
+  border: 1px solid #999;
+  border-radius: 10px;
+  background: transparent;
+}
+
+.wave-group .textarea:focus {
+  outline: none;
+}
+
+.wave-group .label {
+  color: #999;
+  font-size: 18px;
+  font-weight: normal;
+  position: absolute;
+  pointer-events: none;
+  left: 5px;
+  top: 10px;
+  display: flex;
+  transition: color 0.2s, font-size 0.2s, transform 0.2s;
+}
+
+.wave-group .label-char {
+  transition: 0.2s ease all;
+  transition-delay: calc(var(--index) * 0.05s);
+}
+
+/* Animación cuando el input tiene valor o está en foco */
+.wave-group .textarea:focus ~ .label .label-char,
+.wave-group .textarea.value ~ .label .label-char {
+  transform: translateY(-25px);
+  font-size: 14px;
+  color: #252f3e;
+}
+
+/* Estilos de invalidación cuando el campo es inválido */
+.wave-group .label.invalid .label-char,
+.wave-group .bar.invalid {
+  color: #ef4444 !important; /* Cambia el color del texto del label a rojo */
+}
+.wave-group .label.invalid {
+  animation: shake 0.3s ease-in-out 1;
+}
+
+.wave-group .bar {
+  position: relative;
+  display: block;
+  width: 100%;
+}
+
+.wave-group .bar:before,
+.wave-group .bar:after {
+  content: "";
+  height: 2px;
+  width: 0;
+  bottom: 1px;
+  position: absolute;
+  background: #252f3e;
+  transition: 0.2s ease all;
+  -moz-transition: 0.2s ease all;
+  -webkit-transition: 0.2s ease all;
+}
+
+.wave-group .bar:before {
+  left: 50%;
+}
+
+.wave-group .bar:after {
+  right: 50%;
+}
+
+/* Anima la línea de la barra cuando el input tiene foco */
+.wave-group .textarea:focus ~ .bar:before,
+.wave-group .textarea:focus ~ .bar:after {
+  width: 49%;
+}
+
+@keyframes shake {
+  0% {
+    transform: translate(0, 0);
+  }
+  30% {
+    transform: translate(-3px, -1px) rotate(-1deg);
+  }
+  60% {
+    transform: translate(3px, 1px) rotate(1deg);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}

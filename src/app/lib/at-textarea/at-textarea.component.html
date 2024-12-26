@@ -1,0 +1,32 @@
+<div class="wave-group">
+  <textarea
+    class="textarea"
+    [ngClass]="{ value: value !== '' }"
+    [rows]="rows"
+    [value]="value"
+    [disabled]="isDisabled"
+    (input)="onInput($event)"
+    (blur)="onTouched()"
+  ></textarea>
+  <span
+    class="bar"
+    [ngClass]="{
+      invalid:
+        formControl?.invalid && (formControl?.touched || formControl?.dirty)
+    }"
+  ></span>
+  <label
+    class="label"
+    [ngClass]="{
+      invalid:
+        formControl?.invalid && (formControl?.touched || formControl?.dirty)
+    }"
+  >
+    <span
+      *ngFor="let char of getLabelCharacters()"
+      [style.--index]="char.index"
+      class="label-char"
+      >{{ char.char }}</span
+    >
+  </label>
+</div>

@@ -7,7 +7,7 @@ import { AtNotificationComponent } from './lib/at-notification/at-notification.c
 import { AtLoaderComponent } from './lib/at-loader/at-loader.component';
 import { AtSelectComponent } from './lib/at-select/at-select.component';
 import { AtFileinputComponent } from './lib/at-fileinput/at-fileinput.component';
-import { CommonModule } from '@angular/common';
+import { AtColorpickerComponent } from './lib/at-colorpicker/at-colorpicker.component';
 
 @Component({
   selector: 'app-root',
@@ -20,6 +20,7 @@ import { CommonModule } from '@angular/common';
     AtNotificationComponent,
     AtSelectComponent,
     AtTextareaComponent,
+    AtColorpickerComponent,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',

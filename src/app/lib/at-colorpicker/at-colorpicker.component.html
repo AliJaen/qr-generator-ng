@@ -1,1 +1,18 @@
-<p>at-colorpicker works!</p>
+<div class="color-picker-wrapper">
+  <div class="canvas-container">
+    <at-hueSelector
+      [spectrumPosition]="spectrumPosition"
+      [selectedHue]="currentHue"
+      (colorChange)="onColorChange($event)"
+    />
+    <at-spectrumSelector
+      [currentHue]="currentHue"
+      [huePosition]="huePosition"
+      (hueChange)="onHueChange($event)"
+    />
+  </div>
+  <div class="color-inputs">
+    <input type="text" [(ngModel)]="rgbValue" placeholder="RGB" />
+    <input type="text" [(ngModel)]="hexValue" placeholder="HEX" />
+  </div>
+</div>

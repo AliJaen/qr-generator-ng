@@ -1,0 +1,10 @@
+.color-picker-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 1.4rem;
+}
+.canvas-container {
+  display: flex;
+  gap: 15px;
+}

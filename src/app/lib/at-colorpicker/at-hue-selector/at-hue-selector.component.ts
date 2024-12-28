@@ -3,6 +3,7 @@ import {
   Component,
   ElementRef,
   EventEmitter,
+  HostListener,
   Input,
   OnChanges,
   Output,
@@ -17,111 +18,120 @@ import {
   template: `
     <canvas
       #hueCanvas
+      width="200"
+      height="200"
       class="hue-selector"
       (mousedown)="onMouseDown($event)"
       (mousemove)="onMouseMove($event)"
-      (mouseup)="onMouseUp()"
     ></canvas>
   `,
   styles: [
     `
-      .hue-selector {
-        width: 200px;
-        height: 200px;
+      .hue-selector:hover {
         cursor: pointer;
       }
     `,
   ],
 })
 export class AtHueSelectorComponent implements AfterViewInit, OnChanges {
-  @ViewChild('hueCanvas') hueCanvas!: ElementRef<HTMLCanvasElement>;
-  @Input() spectrumPosition = { x: 0, y: 0 };
-  @Input() selectedHue: string = 'red';
-  @Output() colorChange = new EventEmitter<{
-    rgb: string;
-    hex: string;
-    position: { x: number; y: number };
-  }>();
+  @ViewChild('hueCanvas') canvas!: ElementRef<HTMLCanvasElement>;
+  @Input() hue: string = 'rgba(255,255,255,1)';
+  @Output() color: EventEmitter<string> = new EventEmitter(true);
 
-  private isDragging = false;
+  private ctx!: CanvasRenderingContext2D;
+  private mousedown: boolean = false;
+  public selectedPosition!: { x: number; y: number };
+  private isViewInitializaed = false;
 
-  ngAfterViewInit(): void {
-    this.drawHueGradient();
+  ngAfterViewInit() {
+    this.isViewInitializaed = true;
+    this.draw();
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['selectedHue']) {
-      this.drawHueGradient();
+  draw() {
+    if (!this.isViewInitializaed || !this.canvas) {
+      return;
+    }
+    if (!this.ctx) {
+      this.ctx = this.canvas.nativeElement.getContext('2d', {
+        willReadFrequently: true,
+      }) as CanvasRenderingContext2D;
+    }
+    const width = this.canvas.nativeElement.width;
+    const height = this.canvas.nativeElement.height;
+
+    this.ctx.fillStyle = this.hue || 'rgba(255,255,255,1)';
+    this.ctx.fillRect(0, 0, width, height);
+
+    const whiteGrad = this.ctx.createLinearGradient(0, 0, width, 0);
+    whiteGrad.addColorStop(0, 'rgba(255,255,255,1)');
+    whiteGrad.addColorStop(1, 'rgba(255,255,255,0)');
+
+    this.ctx.fillStyle = whiteGrad;
+    this.ctx.fillRect(0, 0, width, height);
+
+    const blackGrad = this.ctx.createLinearGradient(0, 0, 0, height);
+    blackGrad.addColorStop(0, 'rgba(0,0,0,0)');
+    blackGrad.addColorStop(1, 'rgba(0,0,0,1)');
+
+    this.ctx.fillStyle = blackGrad;
+    this.ctx.fillRect(0, 0, width, height);
+
+    if (this.selectedPosition) {
+      this.ctx.strokeStyle = 'white';
+      this.ctx.fillStyle = 'white';
+      this.ctx.beginPath();
+      this.ctx.arc(
+        this.selectedPosition.x,
+        this.selectedPosition.y,
+        7,
+        0,
+        2 * Math.PI
+      );
+      this.ctx.lineWidth = 2;
+      this.ctx.stroke();
     }
   }
 
-  onMouseDown(event: MouseEvent) {
-    this.isDragging = true;
-    this.updateHue(event);
-  }
-
-  onMouseMove(event: MouseEvent) {
-    if (this.isDragging) {
-      this.updateHue(event);
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['hue']) {
+      this.draw();
+      const pos = this.selectedPosition;
+      if (pos) {
+        this.color.emit(this.getColorAtPosition(pos.x, pos.y));
+      }
     }
   }
 
-  onMouseUp() {
-    this.isDragging = false;
+  @HostListener('window:mouseup', ['$event'])
+  onMouseUp(evt: MouseEvent) {
+    this.mousedown = false;
   }
 
-  private drawHueGradient() {
-    const canvas = this.hueCanvas.nativeElement;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
+  onMouseDown(evt: MouseEvent) {
+    this.mousedown = true;
+    this.selectedPosition = { x: evt.offsetX, y: evt.offsetY };
+    this.draw();
+    this.color.emit(this.getColorAtPosition(evt.offsetX, evt.offsetY));
+  }
 
-    // Fill with the selected hue
-    ctx.fillStyle = this.selectedHue;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  onMouseMove(evt: MouseEvent) {
+    if (this.mousedown) {
+      this.selectedPosition = { x: evt.offsetX, y: evt.offsetY };
+      this.draw();
+      this.emitColor(evt.offsetX, evt.offsetY);
+    }
+  }
 
-    // Add white-to-transparent gradient
-    const whiteGradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
-    whiteGradient.addColorStop(0, 'rgba(255,255,255,1)');
-    whiteGradient.addColorStop(1, 'rgba(255,255,255,0)');
-    ctx.fillStyle = whiteGradient;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  emitColor(x: number, y: number) {
+    const rgbaColor = this.getColorAtPosition(x, y);
+    this.color.emit(rgbaColor);
+  }
 
-    // Add black-to-transparent gradient
-    const blackGradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-    blackGradient.addColorStop(0, 'rgba(0,0,0,0)');
-    blackGradient.addColorStop(1, 'rgba(0,0,0,1)');
-    ctx.fillStyle = blackGradient;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    ctx.beginPath();
-    ctx.arc(
-      this.spectrumPosition.x,
-      this.spectrumPosition.y,
-      5,
-      0,
-      2 * Math.PI
+  getColorAtPosition(x: number, y: number) {
+    const imageData = this.ctx.getImageData(x, y, 1, 1).data;
+    return (
+      'rgba(' + imageData[0] + ',' + imageData[1] + ',' + imageData[2] + ',1)'
     );
-    ctx.strokeStyle = '#fff';
-    ctx.lineWidth = 2;
-    ctx.stroke();
-    ctx.closePath();
-  }
-
-  private updateHue(event: MouseEvent) {
-    const canvas = this.hueCanvas.nativeElement;
-    const rect = canvas.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
-    this.spectrumPosition = { x, y };
-
-    const ctx = canvas.getContext('2d');
-    if (ctx) {
-      const imageData = ctx.getImageData(x, y, 1, 1).data;
-      const rgb = `rgb(${imageData[0]}, ${imageData[1]}, ${imageData[2]})`;
-      const hex = `#${imageData[0].toString(16).padStart(2, '0')}${imageData[1]
-        .toString(16)
-        .padStart(2, '0')}${imageData[2].toString(16).padStart(2, '0')}`;
-      this.colorChange.emit({ rgb, hex, position: { x, y } });
-    }
   }
 }

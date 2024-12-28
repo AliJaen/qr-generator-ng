@@ -3,10 +3,8 @@ import {
   Component,
   ElementRef,
   EventEmitter,
-  Input,
-  OnChanges,
+  HostListener,
   Output,
-  SimpleChanges,
   ViewChild,
 } from '@angular/core';
 
@@ -17,88 +15,100 @@ import {
   template: `
     <canvas
       #spectrumCanvas
+      class="color-slider"
+      width="50"
+      height="200"
       class="spectrum-selector"
       (mousedown)="onMouseDown($event)"
       (mousemove)="onMouseMove($event)"
-      (mouseup)="onMouseUp()"
     ></canvas>
   `,
   styles: [
     `
-      .spectrum-selector {
-        width: 30px;
-        height: 200px;
+      .spectrum-selector:hover {
         cursor: pointer;
       }
     `,
   ],
 })
-export class AtSpectrumSelectorComponent implements AfterViewInit, OnChanges {
-  @ViewChild('spectrumCanvas') spectrumCanvas!: ElementRef<HTMLCanvasElement>;
-  @Input() huePosition = { y: 0 };
-  @Input() currentHue = 'rgb(255, 0, 0)';
+export class AtSpectrumSelectorComponent implements AfterViewInit {
+  @ViewChild('spectrumCanvas') canvas!: ElementRef<HTMLCanvasElement>;
+  @Output() color: EventEmitter<string> = new EventEmitter();
 
-  @Output() hueChange = new EventEmitter<string>();
+  private ctx!: CanvasRenderingContext2D;
+  private mousedown: boolean = false;
+  private selectedHeight!: number;
 
-  private isDragging = false;
-
-  ngAfterViewInit(): void {
-    this.drawSpectrum();
+  ngAfterViewInit() {
+    this.draw();
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['currentHue']) {
-      this.drawSpectrum();
+  draw() {
+    if (!this.ctx) {
+      this.ctx = this.canvas.nativeElement.getContext('2d', {
+        willReadFrequently: true,
+      }) as CanvasRenderingContext2D;
+    }
+    const width = this.canvas.nativeElement.width;
+    const height = this.canvas.nativeElement.height;
+
+    this.ctx.clearRect(0, 0, width, height);
+
+    const gradient = this.ctx.createLinearGradient(0, 0, 0, height);
+    gradient.addColorStop(0, 'rgba(255, 0, 0, 1)');
+    gradient.addColorStop(0.17, 'rgba(255, 255, 0, 1)');
+    gradient.addColorStop(0.34, 'rgba(0, 255, 0, 1)');
+    gradient.addColorStop(0.51, 'rgba(0, 255, 255, 1)');
+    gradient.addColorStop(0.68, 'rgba(0, 0, 255, 1)');
+    gradient.addColorStop(0.85, 'rgba(255, 0, 255, 1)');
+    gradient.addColorStop(1, 'rgba(255, 0, 0, 1)');
+
+    this.ctx.beginPath();
+    this.ctx.rect(0, 0, width, height);
+
+    this.ctx.fillStyle = gradient;
+    this.ctx.fill();
+    this.ctx.closePath();
+
+    if (this.selectedHeight) {
+      this.ctx.beginPath();
+      this.ctx.strokeStyle = 'white';
+      this.ctx.lineWidth = 2;
+      this.ctx.rect(0, this.selectedHeight - 5, width, 7);
+      this.ctx.stroke();
+      this.ctx.closePath();
     }
   }
 
-  onMouseDown(event: MouseEvent) {
-    this.isDragging = true;
-    this.updateSpectrum(event);
+  @HostListener('window:mouseup', ['$event'])
+  onMouseUp(evt: MouseEvent) {
+    this.mousedown = false;
   }
 
-  onMouseMove(event: MouseEvent) {
-    if (this.isDragging) {
-      this.updateSpectrum(event);
+  onMouseDown(evt: MouseEvent) {
+    this.mousedown = true;
+    this.selectedHeight = evt.offsetY;
+    this.draw();
+    this.emitColor(evt.offsetX, evt.offsetY);
+  }
+
+  onMouseMove(evt: MouseEvent) {
+    if (this.mousedown) {
+      this.selectedHeight = evt.offsetY;
+      this.draw();
+      this.emitColor(evt.offsetX, evt.offsetY);
     }
   }
 
-  onMouseUp() {
-    this.isDragging = false;
+  emitColor(x: number, y: number) {
+    const rgbaColor = this.getColorAtPosition(x, y);
+    this.color.emit(rgbaColor);
   }
 
-  private drawSpectrum() {
-    const canvas = this.spectrumCanvas.nativeElement;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-    gradient.addColorStop(0, 'red');
-    gradient.addColorStop(0.16, 'orange');
-    gradient.addColorStop(0.33, 'yellow');
-    gradient.addColorStop(0.5, 'green');
-    gradient.addColorStop(0.66, 'blue');
-    gradient.addColorStop(0.83, 'indigo');
-    gradient.addColorStop(1, 'violet');
-    ctx.fillStyle = gradient;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    const lineY = this.huePosition.y;
-    ctx.beginPath();
-    ctx.moveTo(0, lineY);
-    ctx.lineTo(canvas.width, lineY);
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = this.currentHue;
-    ctx.stroke();
-  }
-
-  private updateSpectrum(event: MouseEvent) {
-    const canvas = this.spectrumCanvas.nativeElement;
-    const rect = canvas.getBoundingClientRect();
-    const y = Math.min(Math.max(event.clientY - rect.top, 0), rect.height);
-    this.huePosition.y = y;
-
-    const hue = Math.round((y / rect.height) * 360);
-    this.hueChange.emit(`hsl(${hue}, 100%, 50%)`);
+  getColorAtPosition(x: number, y: number) {
+    const imageData = this.ctx.getImageData(x, y, 1, 1).data;
+    return (
+      'rgba(' + imageData[0] + ',' + imageData[1] + ',' + imageData[2] + ',1)'
+    );
   }
 }

@@ -47,6 +47,10 @@ export class AppComponent {
     private notificationService: AtNotificationService
   ) {}
 
+  handleColor(selectedColor: string | { r: number; g: number; b: number }) {
+    console.log(selectedColor);
+  }
+
   enviar(): void {
     if (this.testForm.valid) {
       this.loading = true;

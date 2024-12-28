@@ -15,7 +15,7 @@
       label="CorrectionLabel"
     />
     <authype-fileinput formControlName="image" [imageURL]="null" />
-    <authype-colorpicker />
+    <authype-colorpicker (colorSelected)="handleColor($event)" />
     <button>Send</button>
   </form>
 </div>

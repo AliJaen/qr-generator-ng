@@ -1,18 +1,51 @@
 <div class="color-picker-wrapper">
   <div class="canvas-container">
-    <at-hueSelector
-      [spectrumPosition]="spectrumPosition"
-      [selectedHue]="currentHue"
-      (colorChange)="onColorChange($event)"
-    />
-    <at-spectrumSelector
-      [currentHue]="currentHue"
-      [huePosition]="huePosition"
-      (hueChange)="onHueChange($event)"
-    />
+    <at-hueSelector [hue]="hue" (color)="onColorChange($event)" />
+    <at-spectrumSelector (color)="onHueChange($event)" />
   </div>
   <div class="color-inputs">
-    <input type="text" [(ngModel)]="rgbValue" placeholder="RGB" />
-    <input type="text" [(ngModel)]="hexValue" placeholder="HEX" />
+    <div>
+      <label for="red">R:</label>
+      <input
+        id="red"
+        type="number"
+        [(ngModel)]="rgb.r"
+        (input)="updateColorFromRGB()"
+        min="0"
+        max="255"
+      />
+    </div>
+    <div>
+      <label for="green">G:</label>
+      <input
+        id="green"
+        type="number"
+        [(ngModel)]="rgb.g"
+        (input)="updateColorFromRGB()"
+        min="0"
+        max="255"
+      />
+    </div>
+    <div>
+      <label for="blue">B:</label>
+      <input
+        id="blue"
+        type="number"
+        [(ngModel)]="rgb.b"
+        (input)="updateColorFromRGB()"
+        min="0"
+        max="255"
+      />
+    </div>
+    <div>
+      <label for="hex">HEX:</label>
+      <input
+        id="hex"
+        type="text"
+        [(ngModel)]="hex"
+        (input)="updateColorFromHEX()"
+        maxlength="7"
+      />
+    </div>
   </div>
 </div>

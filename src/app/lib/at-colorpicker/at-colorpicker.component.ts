@@ -2,7 +2,6 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { AtHueSelectorComponent } from './at-hue-selector/at-hue-selector.component';
 import { AtSpectrumSelectorComponent } from './at-spectrum-selector/at-spectrum-selector.component';
 import { FormsModule } from '@angular/forms';
-import { NgStyle } from '@angular/common';
 
 @Component({
   selector: 'authype-colorpicker',
@@ -16,10 +15,15 @@ export class AtColorpickerComponent {
   public color: string = 'rgba(255, 255, 255, 1)';
   rgb = { r: 255, g: 255, b: 255 };
   hex: string = '#ffffff';
+  public isPickerVisible: boolean = false;
 
   @Output() colorSelected = new EventEmitter<
     string | { r: number; g: number; b: number }
   >();
+
+  togglePickerVisibility(): void {
+    this.isPickerVisible = !this.isPickerVisible;
+  }
 
   onHueChange(newHue: string) {
     this.hue = newHue;
@@ -30,21 +34,24 @@ export class AtColorpickerComponent {
   }
 
   updateColorFromRGB(): void {
-    this.hue = `rgba(${this.rgb.r},${this.rgb.g},${this.rgb.b}, 1)`;
     this.color = `rgba(${this.rgb.r},${this.rgb.g},${this.rgb.b}, 1)`;
+    // this.hue = this.color;
     this.updateSelectedColor();
   }
   updateColorFromHEX(): void {
     const rgb = this.hexToRgb(this.hex);
     if (rgb) {
-      this.hue = `rgba(${rgb.r},${rgb.g},${rgb.b}, 1)`;
       this.color = `rgba(${rgb.r},${rgb.g},${rgb.b}, 1)`;
+      // this.hue = `rgba(${rgb.r},${rgb.g},${rgb.b}, 1)`;
       this.updateSelectedColor();
     }
   }
 
   // Convert HEX to RGB
   private hexToRgb(hex: string): { r: number; g: number; b: number } | null {
+    if (!/^#([A-Fa-f0-9]{6})$/.test(hex)) {
+      return null; // HEX inválido
+    }
     const match = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     return match
       ? {

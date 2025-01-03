@@ -1,10 +1,62 @@
 .color-picker-wrapper {
+  position: absolute;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  padding: 16px;
   display: flex;
   flex-direction: column;
   gap: 5px;
-  margin-top: 1.4rem;
+  max-width: 300px;
+}
+.color-picker-wrapper.hidden {
+  display: none;
 }
 .canvas-container {
   display: flex;
   gap: 10px;
+}
+.colorpicker-container {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: row;
+  margin-top: 1.4rem;
+}
+.color-inputs {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+.color-inputs label {
+  margin-right: 5px;
+}
+.color-preview {
+  width: 30px;
+  height: 30px;
+  border: 1px solid #ccc;
+  border-radius: 5px 0 0 5px;
+}
+.picker-btn {
+  width: 20px;
+  height: 30px;
+  border: 1px solid #ccc;
+  border-radius: 0 5px 5px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.picker-btn button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  padding: 0;
+  display: flex;
+}
+.picker-btn button:hover {
+  color: #007bff;
 }

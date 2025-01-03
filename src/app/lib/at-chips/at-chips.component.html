@@ -1,0 +1,24 @@
+<div class="wave-group">
+  <input
+    class="input"
+    type="text"
+    [(ngModel)]="inputValue"
+    (keydown)="onKeydown($event)"
+    (blur)="addChipOnBlur()"
+  />
+  <span class="bar"></span>
+  <label class="label">
+    <span
+      *ngFor="let char of getLabelCharacters()"
+      [style.--index]="char.index"
+      class="label-char"
+      >{{ char.char }}</span
+    >
+  </label>
+</div>
+<div class="chips-container">
+  <div class="chip" *ngFor="let chip of chips; let i = index">
+    {{ chip }}
+    <span class="remove-chip" (click)="removeChip(i)">x</span>
+  </div>
+</div>

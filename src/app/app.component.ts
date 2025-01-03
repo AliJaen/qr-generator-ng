@@ -8,6 +8,7 @@ import { AtLoaderComponent } from './lib/at-loader/at-loader.component';
 import { AtSelectComponent } from './lib/at-select/at-select.component';
 import { AtFileinputComponent } from './lib/at-fileinput/at-fileinput.component';
 import { AtColorpickerComponent } from './lib/at-colorpicker/at-colorpicker.component';
+import { AtChipsComponent } from './lib/at-chips/at-chips.component';
 
 @Component({
   selector: 'app-root',
@@ -21,6 +22,7 @@ import { AtColorpickerComponent } from './lib/at-colorpicker/at-colorpicker.comp
     AtSelectComponent,
     AtTextareaComponent,
     AtColorpickerComponent,
+    AtChipsComponent,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
@@ -65,5 +67,9 @@ export class AppComponent {
     } else {
       this.testForm.markAllAsTouched();
     }
+  }
+
+  getTags(tags: string[]): void {
+    console.log(tags);
   }
 }

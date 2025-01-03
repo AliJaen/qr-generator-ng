@@ -1,9 +1,43 @@
+.chips-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  padding: 5px;
+  gap: 5px;
+  margin-bottom: 20px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  background-color: #252f3e;
+  color: #fff;
+  border-radius: 16px;
+  padding: 0 8px;
+  font-size: 14px;
+}
+
+.chip .remove-chip {
+  cursor: pointer;
+  font-weight: bold;
+  margin-left: 8px;
+  color: #fff;
+}
+
+input {
+  border: none;
+  outline: none;
+  flex: 1;
+  min-width: 120px;
+  font-size: 14px;
+}
+
 .wave-group {
   position: relative;
   margin-top: 1.4rem;
 }
 
-.wave-group .textarea {
+.wave-group .input {
   font-size: 16px;
   padding: 10px 10px 10px 5px;
   display: block;
@@ -14,7 +48,7 @@
   background: transparent;
 }
 
-.wave-group .textarea:focus {
+.wave-group .input:focus {
   outline: none;
 }
 
@@ -30,29 +64,22 @@
   transition: color 0.2s, font-size 0.2s, transform 0.2s;
 }
 
+.wave-group .label span {
+  color: #999;
+}
+
 .wave-group .label-char {
-  white-space: pre-wrap;
   transition: 0.2s ease all;
   transition-delay: calc(var(--index) * 0.05s);
 }
 
 /* Animación cuando el input tiene valor o está en foco */
-.wave-group .textarea:focus ~ .label .label-char,
-.wave-group .textarea.value ~ .label .label-char {
+.wave-group .label.value .label-char,
+.wave-group .input:focus ~ .label .label-char {
   transform: translateY(-25px);
   font-size: 14px;
   color: #252f3e;
 }
-
-/* Estilos de invalidación cuando el campo es inválido */
-.wave-group .label.invalid .label-char,
-.wave-group .bar.invalid {
-  color: #ef4444 !important; /* Cambia el color del texto del label a rojo */
-}
-.wave-group .label.invalid {
-  animation: shake 0.3s ease-in-out 1;
-}
-
 .wave-group .bar {
   position: relative;
   display: block;
@@ -70,33 +97,4 @@
   transition: 0.2s ease all;
   -moz-transition: 0.2s ease all;
   -webkit-transition: 0.2s ease all;
-}
-
-.wave-group .bar:before {
-  left: 50%;
-}
-
-.wave-group .bar:after {
-  right: 50%;
-}
-
-/* Anima la línea de la barra cuando el input tiene foco */
-.wave-group .textarea:focus ~ .bar:before,
-.wave-group .textarea:focus ~ .bar:after {
-  width: 49%;
-}
-
-@keyframes shake {
-  0% {
-    transform: translate(0, 0);
-  }
-  30% {
-    transform: translate(-3px, -1px) rotate(-1deg);
-  }
-  60% {
-    transform: translate(3px, 1px) rotate(1deg);
-  }
-  100% {
-    transform: translate(0, 0);
-  }
 }

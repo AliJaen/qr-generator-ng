@@ -35,6 +35,7 @@
 }
 
 .wave-group .label-char {
+  white-space: pre-wrap;
   transition: 0.2s ease all;
   transition-delay: calc(var(--index) * 0.05s);
 }

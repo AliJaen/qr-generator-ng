@@ -4,7 +4,7 @@
     <authype-input formControlName="texto" label="Text" />
     <authype-textarea
       formControlName="textoLargo"
-      label="LongText"
+      label="Long Text"
       [rows]="4"
     />
     <authype-select
@@ -12,10 +12,16 @@
       [items]="errorsTypes"
       selectLabel="label"
       selectValue="value"
-      label="CorrectionLabel"
+      label="Correction Label"
     />
     <authype-fileinput formControlName="image" [imageURL]="null" />
     <authype-colorpicker (colorSelected)="handleColor($event)" />
+    <authype-chips
+      placeholder="Add a tag..."
+      label="Tag"
+      separator="enter"
+      (chipsChange)="getTags($event)"
+    />
     <button>Send</button>
   </form>
 </div>

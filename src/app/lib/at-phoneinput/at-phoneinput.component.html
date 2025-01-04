@@ -1,0 +1,40 @@
+<div class="tel-input">
+  <select [(ngModel)]="selectedCountryCode" (change)="onCountryCodeChange()">
+    <option *ngFor="let country of countries" [value]="country.dialCode">
+      {{ country.name }} (+{{ country.dialCode }})
+    </option>
+  </select>
+  <div class="wave-group">
+    <input
+      type="tel"
+      class="input"
+      [ngClass]="{ value: phoneNumber !== '' }"
+      [class.invalid]="
+        formControl?.invalid && (formControl?.touched || formControl?.dirty)
+      "
+      [(ngModel)]="phoneNumber"
+      (input)="onPhoneNumberChange($event)"
+    />
+    <span
+      class="bar"
+      [ngClass]="{
+        invalid:
+          formControl?.invalid && (formControl?.touched || formControl?.dirty)
+      }"
+    ></span>
+    <label
+      class="label"
+      [ngClass]="{
+        invalid:
+          formControl?.invalid && (formControl?.touched || formControl?.dirty)
+      }"
+    >
+      <span
+        *ngFor="let char of getLabelCharacters()"
+        [style.--index]="char.index"
+        class="label-char"
+        >{{ char.char }}</span
+      >
+    </label>
+  </div>
+</div>

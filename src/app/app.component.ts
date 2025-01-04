@@ -9,6 +9,7 @@ import { AtSelectComponent } from './lib/at-select/at-select.component';
 import { AtFileinputComponent } from './lib/at-fileinput/at-fileinput.component';
 import { AtColorpickerComponent } from './lib/at-colorpicker/at-colorpicker.component';
 import { AtChipsComponent } from './lib/at-chips/at-chips.component';
+import { AtPhoneinputComponent } from './lib/at-phoneinput/at-phoneinput.component';
 
 @Component({
   selector: 'app-root',
@@ -23,6 +24,7 @@ import { AtChipsComponent } from './lib/at-chips/at-chips.component';
     AtTextareaComponent,
     AtColorpickerComponent,
     AtChipsComponent,
+    AtPhoneinputComponent,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
@@ -41,6 +43,10 @@ export class AppComponent {
     texto: ['', Validators.required],
     textoLargo: ['', Validators.required],
     correctionLabel: ['', Validators.required],
+    phone: [
+      '',
+      [Validators.required, Validators.minLength(10), Validators.maxLength(12)],
+    ],
     image: [null],
   });
 
@@ -54,6 +60,8 @@ export class AppComponent {
   }
 
   enviar(): void {
+    console.log(this.testForm.value);
+
     if (this.testForm.valid) {
       this.loading = true;
       setTimeout(() => {

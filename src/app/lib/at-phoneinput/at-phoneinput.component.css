@@ -1,9 +1,23 @@
+.tel-input {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 1.4rem;
+  width: 100%;
+}
+select {
+  font-size: 16px;
+  padding: 10px 10px 10px 5px;
+  display: block;
+  border: 1px solid #999;
+  border-radius: 10px;
+  background: transparent;
+}
 .wave-group {
   position: relative;
-  margin-top: 1.4rem;
+  flex: 1;
 }
-
-.wave-group .textarea {
+.wave-group input[type="tel"].input {
   font-size: 16px;
   padding: 10px 10px 10px 5px;
   display: block;
@@ -14,7 +28,8 @@
   background: transparent;
 }
 
-.wave-group .textarea:focus {
+select:focus,
+.wave-group .input:focus {
   outline: none;
 }
 
@@ -41,8 +56,8 @@
 }
 
 /* Animación cuando el input tiene valor o está en foco */
-.wave-group .textarea:focus ~ .label .label-char,
-.wave-group .textarea.value ~ .label .label-char {
+.wave-group .input:focus ~ .label .label-char,
+.wave-group .input.value ~ .label .label-char {
   transform: translateY(-25px);
   font-size: 14px;
   color: #252f3e;
@@ -85,8 +100,8 @@
 }
 
 /* Anima la línea de la barra cuando el input tiene foco */
-.wave-group .textarea:focus ~ .bar:before,
-.wave-group .textarea:focus ~ .bar:after {
+.wave-group .input:focus ~ .bar:before,
+.wave-group .input:focus ~ .bar:after {
   width: 49%;
 }
 

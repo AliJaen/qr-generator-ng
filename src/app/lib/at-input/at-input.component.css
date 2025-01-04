@@ -30,6 +30,10 @@
   transition: color 0.2s, font-size 0.2s, transform 0.2s;
 }
 
+.wave-group .label span {
+  color: #999;
+}
+
 .wave-group .label-char {
   white-space: pre-wrap;
   transition: 0.2s ease all;

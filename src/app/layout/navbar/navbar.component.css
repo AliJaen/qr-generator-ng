@@ -1,0 +1,27 @@
+nav {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+.nav-links {
+  margin: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+}
+.nav-links a {
+  text-decoration: none;
+  padding-inline: 0.2rem;
+}
+.nav-links a span {
+  color: #ffffff;
+  font-size: 1.2rem;
+}
+.nav-links a:hover {
+  border-bottom: 1px solid #ffffff;
+}

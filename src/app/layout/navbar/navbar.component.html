@@ -1,0 +1,9 @@
+<nav>
+  <ul class="nav-links">
+    <li *ngFor="let item of itemsMenu">
+      <a [routerLink]="item.navigate"
+        ><span>{{ item.label }}</span></a
+      >
+    </li>
+  </ul>
+</nav>

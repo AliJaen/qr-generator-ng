@@ -1,0 +1,43 @@
+.buttons-session,
+.account {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  height: 100%;
+}
+.account button {
+  cursor: pointer;
+  background-color: transparent;
+  color: #ffffff;
+  border: none;
+  width: 3rem;
+  height: 3rem;
+}
+
+.buttons-session button {
+  cursor: pointer;
+  border: none;
+  color: #ffffff;
+  border-radius: 4px;
+  font-size: 16px;
+  padding-block: 6px;
+  padding-inline: 12px;
+}
+.buttons-session button:hover {
+  text-decoration: underline;
+}
+.buttons-session button.btn-login {
+  background-color: #ffffff;
+  color: #faac52;
+}
+.buttons-session button.btn-singin {
+  background-color: #faac52;
+}
+.buttons-session button.btn-singin:active {
+  outline: 1px solid #faac52;
+}
+.buttons-session button.btn-login:active {
+  outline: 1px solid #ffffff;
+}

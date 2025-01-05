@@ -1,0 +1,20 @@
+<div class="carousel-container">
+  <button class="prev-btn" (click)="prev()">&#8249;</button>
+  <div class="carousel-image">
+    <img
+      *ngIf="images.length > 0"
+      [src]="images[currentIndex].src"
+      [alt]="images[currentIndex].alt || 'Image not available'"
+    />
+    <p *ngIf="!images.length">No images available</p>
+  </div>
+  <button class="next-btn" (click)="next()">&#8250;</button>
+</div>
+<div class="carousel-indicators">
+  <div
+    *ngFor="let image of images; index as i"
+    class="indicator"
+    [class.active]="i === currentIndex"
+    (click)="goTo(i)"
+  ></div>
+</div>

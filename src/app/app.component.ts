@@ -10,6 +10,7 @@ import { AtFileinputComponent } from './lib/at-fileinput/at-fileinput.component'
 import { AtColorpickerComponent } from './lib/at-colorpicker/at-colorpicker.component';
 import { AtChipsComponent } from './lib/at-chips/at-chips.component';
 import { AtPhoneinputComponent } from './lib/at-phoneinput/at-phoneinput.component';
+import { AtCarouselComponent } from './lib/at-carousel/at-carousel.component';
 
 @Component({
   selector: 'app-root',
@@ -25,6 +26,7 @@ import { AtPhoneinputComponent } from './lib/at-phoneinput/at-phoneinput.compone
     AtColorpickerComponent,
     AtChipsComponent,
     AtPhoneinputComponent,
+    AtCarouselComponent,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
@@ -32,6 +34,13 @@ import { AtPhoneinputComponent } from './lib/at-phoneinput/at-phoneinput.compone
 export class AppComponent {
   title = 'qr-generator';
   loading: boolean = false;
+
+  images = [
+    { src: '../assets/img/bell.svg', alt: 'bell' },
+    { src: '../assets/img/bus.svg', alt: 'bus' },
+    { src: '../assets/img/key.svg', alt: 'key' },
+    { src: '../assets/img/qr.svg', alt: 'qr' },
+  ];
 
   errorsTypes = [
     { value: 'L', label: 'Low (L)' },

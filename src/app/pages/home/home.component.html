@@ -1,0 +1,35 @@
+<section>
+  <p class="description">
+    Generate, Download & Save your Personalized QR Codes
+  </p>
+  <div class="card form-container">
+    <form [formGroup]="testForm" (ngSubmit)="enviar()">
+      <authype-input formControlName="texto" label="Text" />
+      <authype-textarea
+        formControlName="textoLargo"
+        label="Long Text"
+        [rows]="4"
+      />
+      <authype-select
+        formControlName="correctionLabel"
+        [items]="errorsTypes"
+        selectLabel="label"
+        selectValue="value"
+        label="Correction Label"
+      />
+      <authype-phoneinput formControlName="phone" label="Phone" />
+      <authype-fileinput formControlName="image" [imageURL]="null" />
+      <authype-colorpicker (colorSelected)="handleColor($event)" />
+      <authype-chips
+        placeholder="Add a tag..."
+        label="Tag"
+        separator="enter"
+        (chipsChange)="getTags($event)"
+      />
+      <button>Send</button>
+    </form>
+  </div>
+</section>
+@if (loading) {
+<authype-loader />
+}

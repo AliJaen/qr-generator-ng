@@ -1,0 +1,22 @@
+section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.description {
+  font-size: 4rem;
+  max-width: 50%;
+  align-self: center;
+  text-align: center;
+}
+.form-container {
+  align-self: center;
+  padding: 1rem;
+  padding-bottom: 2rem;
+  width: 85%;
+}
+@media screen and (max-width: 576px) {
+  .description {
+    max-width: 100%;
+  }
+}
